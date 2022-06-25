@@ -1,0 +1,166 @@
+---
+title: "An overview of `BradleyTerryScalable`" 
+format: 
+  revealjs:
+    theme: emk-theme.scss
+    highlight-style: ek_syntax_highlighting.theme
+    execute:
+      echo: true
+editor: visual
+---
+
+## The Bradley-Terry model {.middle .center background-color="#006AD4"}
+
+##  {background-image="images/football.png" background-size="contain"}
+
+##  {background-image="images/journals.png"}
+
+## The model
+
+The Bradley-Terry probability that item $i$ beats item $j$ is
+
+$$p_{ij} = \frac{\pi_i}{\pi_i + \pi_j},$$
+
+where $\pi_k$ is a strength parameter for player $k$, $1 \leq k \leq K$ and $\sum_{i=1}^K{\pi_i} = K$.
+
+## The comparison graph
+
+![](toy-data-graph.svg){fig-align="center"}
+
+. . .
+
+`r htmltools::br()` **The MLE exists and is finite whenever the comparison graph is fully connected.**
+
+## Fitting the model
+
+::: columns
+::: {.column width="50%"}
+**MLE**
+
+$$\pi_i^{(n+1)} = \frac{W_i}{\sum_{j=1}^K \frac{n_{ij}}{\pi_i^{(n)} + \pi_j^{(n)}}}$$
+:::
+
+::: {.column width="50%"}
+**MAP**
+
+$$\pi_i^{(n+1)} = \frac{a - 1 + W_i}{b + \sum_{j=1}^K \frac{n_{ij}}{\pi_i^{(n)} + \pi_j^{(n)}}}
+$$
+:::
+:::
+
+## Fitting the model
+
+::: columns
+::: {.column width="50%"}
+**MLE**
+
+$$\pi_i^{(n+1)} = \frac{W_i}{\sum_{j=1}^K \frac{n_{ij}}{\pi_i^{(n)} + \pi_j^{(n)}}}$$
+:::
+
+::: {.column width="50%"}
+**MAP**
+
+$$\pi_i^{(n+1)} = \frac{{\color{#D4006A}{a - 1}} + W_i}{{\color{#D4006A}b} + \sum_{j=1}^K \frac{n_{ij}}{\pi_i^{(n)} + \pi_j^{(n)}}}
+$$
+:::
+:::
+
+## `BradleyTerryScalable` {.middle .center background-color="#006AD4"}
+
+## Aims
+
+- Fit the Bradley-Terry model to large and (potentially) sparse data sets
+
+- Has to be fast *enough* ('Scalable' is in the package name!)
+
+- Has to be able to deal with cases when the comparison graph is not fully connected
+
+- Well thought out user interface
+
+- Complement to (NOT a replacement for) `BradleyTerry2` package
+
+## Workflow: data
+
+- `btdata(x)` to create object of class `"btdata"`
+
+  - `x` can be a data frame, graph, matrix or contigency table
+  
+  - may need to call `codes_to_counts()` first
+
+  - `summary(btdata)`
+  
+  - `select_components(btdata, subset)`
+
+## Workflow: fit
+
+- `btfit(btdata, a)` to fit model and create object of class `"btfit"`
+
+  - S3 methods for `btfit` object: 
+      - `summary`, `fitted`, `coef`, `vcov`, `simulate`
+      
+  - `btprob(object)` for Bradley-Terry probabilities $p_{ij}$
+
+## `btdata(x)`
+
+```{r}
+library(BradleyTerryScalable)
+citations
+```
+
+```{r}
+citations_btdata <- btdata(citations)
+summary(citations_btdata) 
+```
+---
+
+```{r}
+toy_data
+```
+---
+
+```{r}
+#| warning: false
+toy_btdata <- toy_data |>
+  codes_to_counts(c("W1", "W2", "D")) |>
+  btdata()
+summary(toy_btdata)
+```
+
+## `btfit(btdata, a)`
+
+```{r}
+#| eval: false
+
+btfit(btdata, a) 
+```
+
+- If `a = 1`, finds MLE on each fully connected component, using the MM-algorithm
+
+- If `a > 1`, finds the MAP estimate of $\pi$
+
+- Returns a `btfit` S3 object
+
+. . .
+
+```{r}
+#| eval: false
+
+btfit(btdata, a, 
+      MAP_by_component = FALSE, 
+      subset = NULL, 
+      maxit = 10000, 
+      epsilon = 0.001) 
+```
+---
+
+```{r}
+toy_fit_MAP <- btfit(toy_btdata, a = 1.1)
+summary(toy_fit_MAP)  
+```
+
+---
+
+```{r}
+toy_fit_MLE <- btfit(toy_btdata, a = 1)
+summary(toy_fit_MLE, SE = TRUE) 
+```

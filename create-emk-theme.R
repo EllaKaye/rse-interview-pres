@@ -15,6 +15,7 @@ style_xaringan(
   inverse_background_color = emk_colours$blue,
   text_font_google = google_font("Montserrat"),
   code_font_google = google_font("Fira Mono"),
+  header_font_google = google_font("Jost"),
   inverse_text_color = emk_colours$pale,
   text_color = emk_colours$dark,
   text_bold_color = emk_colours$pink,

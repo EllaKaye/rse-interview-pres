@@ -1,0 +1,374 @@
+---
+title: "TITLE"
+author: "Ella Kaye"
+date: "DATE"
+output:
+  xaringan::moon_reader:
+    includes:
+      in_header: header.html
+    seal: false
+    css: [xaringan-themer.css, extra.css]
+    lib_dir: libs
+    nature:
+      highlightStyle: solarized-light
+      highlightLines: true
+      countIncrementalSlides: false
+---
+<!-- To get a footer -->
+<!-- layout: true -->
+<!-- <div class="my-footer"><span>bit.ly/LINK • @ellamkaye</span></div>  -->
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(collapse = TRUE, fig.retina = 3)
+```
+
+```{r meta, echo=FALSE}
+library(metathis)
+meta() %>%
+  meta_general(
+    description = "FILL_IN",
+    generator = "xaringan and remark.js"
+  ) %>% 
+  meta_name("github-repo" = "ellakaye/FILL_IN") %>% 
+  meta_social(
+    title = "FILL_IN",
+    url = "FILL_IN",
+    image = "https://ellakaye.rbind.io/talk/TALK_NAME/cover-slide.png",
+    image_alt = paste(
+      "Title slide of PRESENTATION NAME", 
+      "Presented at EVENT on DATE by Ella Kaye"
+    ),
+    og_type = "website",
+    og_author = "Ella Kaye",
+    twitter_card_type = "summary_large_image",
+    twitter_creator = "@ellamkaye"
+  )
+```
+
+```{r xariganExtra, echo = FALSE, waring = FALSE}
+library(xaringanExtra)
+use_xaringan_extra(c("tile_view", "clipboard", "extra_css"))
+```
+
+---
+
+class: inverse, left, middle
+
+# TITLE
+
+.larger[Ella Kaye | EVENT | DATE]
+
+---
+
+class: inverse, center, middle
+
+# The Bradley-Terry model 
+
+---
+
+background-image: url("football.png")
+background-size: cover
+
+---
+
+background-image: url(http://authorservices.taylorandfrancis.com/custom/uploads/2015/10/Maths-Stats-Journal-Finder-1170x827.jpg)
+background-size: cover
+
+
+---
+
+- Let there be $K$ items. The Bradley-Terry probability that item $i$ beats item $j$ is
+$$p_{ij} = \frac{\pi_i}{\pi_i + \pi_j},$$
+where $\pi_k$ is a strength parameter for player $k$, $1 \leq k \leq K$.
+
+- Equivalently
+$$\text{logit}(p_{ij}) = \lambda_i - \lambda_j,$$
+where $\lambda_k = \log(\pi_k)$.
+
+- A constraint is needed:
+
+  - $\sum_{i=1}^K{\pi_i} = K$,
+  - $\text{mean}({\lambda_i}) = 0$. 
+
+- The log-likelihood is given by
+$$\ell(\pi) = \sum_{i = 1}^{K}\sum_{j = 1}^{K} [w_{ij}(\log \pi_i - \log(\pi_i + \pi_j))],$$
+where $w_{ij}$ is the number of times item $i$ beats item $j$.
+
+
+---
+# Comparison graph/Existence of the MLE
+```{r, echo=FALSE, message = FALSE, warning = FALSE, fig.width = 6, fig.height=5, fig.align="center"}
+library(BradleyTerryScalable)
+library(igraph)
+library(dplyr)
+library(ggplot2)
+data(toy_data)
+toy_data_4col <- toy_data %>%
+  codes_to_counts(c("W1", "W2", "D"))
+temp <- btdata(toy_data_4col, return_graph = TRUE)
+g <- temp$graph
+plot(g, vertex.size = 28, edge.arrow.size = 0.5)
+```
+
+The MLE exists and is finite whenever the comparison graph is fully connected (there is a directed path from $i$ to $j$ for every $i$ and every $j$).
+
+
+---
+# Options for fitting the Bradley-Terry model
+
+- If the comparison graph is fully connected, can find the MLE (using MM-algorithm of Hunter (2004))
+
+
+- If the comparison graph is not fully connected:
+    - find MLE on each fully-connected component
+
+    - find MAP estimate using Bayesian approach of Caron and Doucet (2012) 
+
+      - this exists and is finite, and allows ranking of all items, even when the comparison graph is not fully connected.
+
+- N.B. Can also include a prior when the comparison graph is fully connected
+
+---
+
+# Fitting the model
+- Using the MM-algorithm to find the MLE:
+$$\pi_i^{(n+1)} = \frac{W_i}{\sum_{j=1}^K \frac{n_{ij}}{\pi_i^{(n)} + \pi_j^{(n)}}}$$
+where $W_i = \sum_{j=1}^K w_{ij}$ is the number of wins for item $i$ and $n_{ij} = w_{ij} + w_{ji}$ is the number of comparisons between item $i$ and item $j$.
+
+
+- Using the EM-algorithm to find the MAP estimate:
+$$\pi_i^{(n+1)} = \frac{a - 1 + W_i}{b + \sum_{j=1}^K \frac{n_{ij}}{\pi_i^{(n)} + \pi_j^{(n)}}},$$
+where $a$ and $b$ are the shape and rate parameters of a gamma-distributed prior on $\pi$: $p(\pi) = \prod_{i=1}^K \mathcal{G}(\pi_i; a, b)$.
+
+---
+class: inverse, center, middle
+
+# `BradleyTerryScalable`
+
+---
+
+# Aims
+- Fit the Bradley-Terry model to large and (potentially) sparse data sets
+
+- Has to be fast *enough* ('Scalable' is in the package name!)
+
+- Has to be able to handle large data sets
+
+- Has to be able to deal with cases when the comparison graph is not fully connected
+
+- Do one thing well, within a complete package
+
+- Well thought-out user interface
+
+- Complement to (NOT a replacement for) `BradleyTerry2` package
+
+---
+
+# Installation
+```{r eval=FALSE}
+# CRAN
+install.packages("BradleyTerryScalable")
+
+# GitHub
+devtools::install_github("EllaKaye/BradleyTerryScalable")
+```
+
+```{r}
+library(BradleyTerryScalable)
+```
+
+---
+
+# Workflow
+
+- `btdata(x)` to create object of class `"btdata"`
+  - may need to call `codes_to_counts()` first
+
+  - `summary(btdata)`
+  
+  - `select_components(btdata, subset)`
+
+- `btfit(btdata, a)` to fit model and create object of class `"btfit"`
+
+  - S3 methods for `btfit` object: 
+      - `summary`
+      - `fitted`
+      - `coef`
+      - `vcov`
+      - `simulate`
+      
+  - `btprob(object)` for Bradley-Terry probabilities $p_{ij}$
+
+---
+
+# `btdata(x)`
+
+- `x` can be a three or four column data frame with counts of wins, an `igraph` object or a square matrix or contigency table
+
+```{r eval = TRUE}
+data(citations)
+citations
+citations_data <- btdata(citations)
+summary(citations_data) 
+```
+
+---
+
+```{r eval = TRUE}
+data(toy_data)
+head(toy_data, 4)
+toy_data_4c <- codes_to_counts(toy_data, c("W1", "W2", "D"))  
+toy_btdata <- btdata(toy_data_4c)
+summary(toy_btdata)
+```
+
+---
+
+# `btfit(btdata, a)`
+
+```{r eval = FALSE}
+btfit(btdata, a) 
+```
+
+- If `a = 1`, finds MLE on each fully connected component, using the MM-algorithm
+
+- If `a > 1`, finds the MAP estimate of $\pi$
+
+- Returns a `btfit` S3 object
+
+```{r eval = FALSE}
+btfit(btdata, a, 
+      MAP_by_component = FALSE, 
+      subset = NULL, 
+      maxit = 10000, 
+      epsilon = 0.001) 
+```
+
+---
+```{r, echo = FALSE}
+toy_btdata <- toy_data %>%
+  codes_to_counts(c("W1", "W2", "D")) %>%
+  btdata()
+```
+
+```{r}
+toy_fit_MAP <- btfit(toy_btdata, a = 1.1)
+summary(toy_fit_MAP)  
+```
+
+---
+```{r, echo = FALSE}
+toy_btdata <- toy_data %>%
+  codes_to_counts(c("W1", "W2", "D")) %>%
+  btdata()
+```
+
+
+```{r}
+toy_fit_MLE <- btfit(toy_btdata, a = 1)
+summary(toy_fit_MLE, SE = TRUE) 
+```
+
+---
+```{r}
+toy_data %>%
+  codes_to_counts(c("W1", "W2", "D")) %>%
+  btdata() %>%
+  btfit(1) %>%
+  summary(ref = "Amy", subset = function(x) "Amy" %in% names(x)) 
+```
+
+---
+# `btprob(object)`
+
+Gives the Bradley-Terry probabilities $\frac{\pi_i}{\pi_i + \pi_j}$
+
+```{r}
+citations %>%
+  btdata() %>%
+  btfit(1, epsilon = 1e-6) %>%
+  btprob()
+```
+
+---
+
+```{r}
+citations %>%
+  btdata() %>%
+  btfit(1, epsilon = 1e-6) %>%
+  btprob(as_df = TRUE)
+```
+
+
+---
+# A proper example
+```{r cache = TRUE, echo = FALSE, message=FALSE, warning = FALSE}
+comp_cites <- readr::read_csv(here::here("comp_cites_3.csv")) %>%
+  mutate(cited_pdpass = as.character(cited_pdpass), citing_pdpass = as.character(citing_pdpass))
+```
+
+```{r}
+comp_cites 
+```
+
+---
+
+```{r cache = TRUE}
+system.time(comp_cites_data <- btdata(comp_cites))
+summary(comp_cites_data)
+```
+
+---
+
+```{r cache = TRUE}
+comp_cites_data <- btdata(comp_cites)
+system.time(comp_cites_fit <- btfit(comp_cites_data, 1))
+system.time(comp_cites_fit <- btfit(comp_cites_data, 1.1)) 
+```
+
+---
+
+```{r, echo = FALSE, fig.align="center", out.width = "80%", out.height= "80%"}
+load("btfit_timings_df.RData")
+
+pres_adj <- theme(axis.text=element_text(size=18), axis.title=element_text(size=24), strip.text.x = element_text(size = 18), strip.text.y = element_text(size = 18), legend.text = element_text(size = 18), legend.title=element_text(size=24), title=element_text(size=24))
+
+btfit_timings_plot <- ggplot(btfit_timings_df, aes(K, time, colour = density)) +
+  geom_line(size = 1.5) + 
+  geom_point(size = 3) +
+  xlab("K (number of items)") +
+  ylab("time (seconds)") +
+  pres_adj +
+  ggtitle("Timings for btfit()") 
+
+btfit_timings_plot
+```
+
+---
+
+class: center, middle
+
+# Further information
+
+CRAN
+
+[https://CRAN.R-project.org/package=BradleyTerryScalable](https://CRAN.R-project.org/package=BradleyTerryScalable)
+
+GitHub
+
+[https://github.com/EllaKaye/BradleyTerryScalable]([https://github.com/EllaKaye/BradleyTerryScalable])
+
+Documentation (`pkgdown` site)
+
+[https://ellakaye.github.io/BradleyTerryScalable]([https://ellakaye.github.io/BradleyTerryScalable])
+
+---
+
+class: left, end
+
+.right[# Thank you!
+## Any questions?
+### <span style="color:#FDFCFA">Get in touch!</span>]
+
+

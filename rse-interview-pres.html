@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>TITLE</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ella Kaye" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <meta name="description" content="FILL_IN"/>
+    <meta name="generator" content="xaringan and remark.js"/>
+    <meta name="github-repo" content="ellakaye/FILL_IN"/>
+    <meta name="twitter:title" content="FILL_IN"/>
+    <meta name="twitter:description" content="FILL_IN"/>
+    <meta name="twitter:url" content="FILL_IN"/>
+    <meta name="twitter:image:src" content="https://ellakaye.rbind.io/talk/TALK_NAME/cover-slide.png"/>
+    <meta name="twitter:image:alt" content="Title slide of PRESENTATION NAME Presented at EVENT on DATE by Ella Kaye"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:creator" content="@ellamkaye"/>
+    <meta name="twitter:site" content="@ellamkaye"/>
+    <meta property="og:title" content="FILL_IN"/>
+    <meta property="og:description" content="FILL_IN"/>
+    <meta property="og:url" content="FILL_IN"/>
+    <meta property="og:image" content="https://ellakaye.rbind.io/talk/TALK_NAME/cover-slide.png"/>
+    <meta property="og:image:alt" content="Title slide of PRESENTATION NAME Presented at EVENT on DATE by Ella Kaye"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:locale" content="en_US"/>
+    <meta property="article:author" content="Ella Kaye"/>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <script src="libs/clipboard/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <link rel="icon" href="favicon.png" type="image/png"> 
+    <link rel="shortcut icon" href="favicon.png" type="image/png"> 
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="extra.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+&lt;!-- To get a footer --&gt;
+&lt;!-- layout: true --&gt;
+&lt;!-- &lt;div class="my-footer"&gt;&lt;span&gt;bit.ly/LINK • @ellamkaye&lt;/span&gt;&lt;/div&gt;  --&gt;
+
+
+
+
+
+
+
+---
+
+class: inverse, left, middle
+
+# TITLE
+
+.larger[Ella Kaye | EVENT | DATE]
+
+---
+
+class: inverse, center, middle
+
+# The Bradley-Terry model 
+
+---
+
+background-image: url("football.png")
+background-size: cover
+
+---
+
+background-image: url(http://authorservices.taylorandfrancis.com/custom/uploads/2015/10/Maths-Stats-Journal-Finder-1170x827.jpg)
+background-size: cover
+
+
+---
+
+- Let there be `\(K\)` items. The Bradley-Terry probability that item `\(i\)` beats item `\(j\)` is
+`$$p_{ij} = \frac{\pi_i}{\pi_i + \pi_j},$$`
+where `\(\pi_k\)` is a strength parameter for player `\(k\)`, `\(1 \leq k \leq K\)`.
+
+- Equivalently
+`$$\text{logit}(p_{ij}) = \lambda_i - \lambda_j,$$`
+where `\(\lambda_k = \log(\pi_k)\)`.
+
+- A constraint is needed:
+
+  - `\(\sum_{i=1}^K{\pi_i} = K\)`,
+  - `\(\text{mean}({\lambda_i}) = 0\)`. 
+
+- The log-likelihood is given by
+`$$\ell(\pi) = \sum_{i = 1}^{K}\sum_{j = 1}^{K} [w_{ij}(\log \pi_i - \log(\pi_i + \pi_j))],$$`
+where `\(w_{ij}\)` is the number of times item `\(i\)` beats item `\(j\)`.
+
+
+---
+# Comparison graph/Existence of the MLE
+&lt;img src="rse-interview-pres_files/figure-html/unnamed-chunk-1-1.png" width="432" style="display: block; margin: auto;" /&gt;
+
+The MLE exists and is finite whenever the comparison graph is fully connected (there is a directed path from `\(i\)` to `\(j\)` for every `\(i\)` and every `\(j\)`).
+
+
+---
+# Options for fitting the Bradley-Terry model
+
+- If the comparison graph is fully connected, can find the MLE (using MM-algorithm of Hunter (2004))
+
+
+- If the comparison graph is not fully connected:
+    - find MLE on each fully-connected component
+
+    - find MAP estimate using Bayesian approach of Caron and Doucet (2012) 
+
+      - this exists and is finite, and allows ranking of all items, even when the comparison graph is not fully connected.
+
+- N.B. Can also include a prior when the comparison graph is fully connected
+
+---
+
+# Fitting the model
+- Using the MM-algorithm to find the MLE:
+`$$\pi_i^{(n+1)} = \frac{W_i}{\sum_{j=1}^K \frac{n_{ij}}{\pi_i^{(n)} + \pi_j^{(n)}}}$$`
+where `\(W_i = \sum_{j=1}^K w_{ij}\)` is the number of wins for item `\(i\)` and `\(n_{ij} = w_{ij} + w_{ji}\)` is the number of comparisons between item `\(i\)` and item `\(j\)`.
+
+
+- Using the EM-algorithm to find the MAP estimate:
+`$$\pi_i^{(n+1)} = \frac{a - 1 + W_i}{b + \sum_{j=1}^K \frac{n_{ij}}{\pi_i^{(n)} + \pi_j^{(n)}}},$$`
+where `\(a\)` and `\(b\)` are the shape and rate parameters of a gamma-distributed prior on `\(\pi\)`: `\(p(\pi) = \prod_{i=1}^K \mathcal{G}(\pi_i; a, b)\)`.
+
+---
+class: inverse, center, middle
+
+# `BradleyTerryScalable`
+
+---
+
+# Aims
+- Fit the Bradley-Terry model to large and (potentially) sparse data sets
+
+- Has to be fast *enough* ('Scalable' is in the package name!)
+
+- Has to be able to handle large data sets
+
+- Has to be able to deal with cases when the comparison graph is not fully connected
+
+- Do one thing well, within a complete package
+
+- Well thought-out user interface
+
+- Complement to (NOT a replacement for) `BradleyTerry2` package
+
+---
+
+# Installation
+
+```r
+# CRAN
+install.packages("BradleyTerryScalable")
+
+# GitHub
+devtools::install_github("EllaKaye/BradleyTerryScalable")
+```
+
+
+```r
+library(BradleyTerryScalable)
+```
+
+---
+
+# Workflow
+
+- `btdata(x)` to create object of class `"btdata"`
+  - may need to call `codes_to_counts()` first
+
+  - `summary(btdata)`
+  
+  - `select_components(btdata, subset)`
+
+- `btfit(btdata, a)` to fit model and create object of class `"btfit"`
+
+  - S3 methods for `btfit` object: 
+      - `summary`
+      - `fitted`
+      - `coef`
+      - `vcov`
+      - `simulate`
+      
+  - `btprob(object)` for Bradley-Terry probabilities `\(p_{ij}\)`
+
+---
+
+# `btdata(x)`
+
+- `x` can be a three or four column data frame with counts of wins, an `igraph` object or a square matrix or contigency table
+
+
+```r
+data(citations)
+citations
+##               citing
+## cited          Biometrika Comm Statist JASA JRSS-B
+##   Biometrika          714          730  498    221
+##   Comm Statist         33          425   68     17
+##   JASA                320          813 1072    142
+##   JRSS-B              284          276  325    188
+citations_data &lt;- btdata(citations)
+summary(citations_data) 
+## Number of items: 4 
+## Density of wins matrix: 1 
+## Fully-connected: TRUE
+```
+
+---
+
+
+```r
+data(toy_data)
+head(toy_data, 4)
+## # A tibble: 4 × 3
+##   player1 player2 outcome
+##   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  
+## 1 Cyd     Amy     W1     
+## 2 Amy     Ben     D      
+## 3 Ben     Eve     W2     
+## 4 Cyd     Dan     W2
+toy_data_4c &lt;- codes_to_counts(toy_data, c("W1", "W2", "D"))  
+toy_btdata &lt;- btdata(toy_data_4c)
+summary(toy_btdata)
+## Number of items: 8 
+## Density of wins matrix: 0.25 
+## Fully-connected: FALSE 
+## Number of fully-connected components: 3 
+## Summary of fully-connected components: 
+##   Component size Freq
+## 1              1    1
+## 2              3    1
+## 3              4    1
+```
+
+---
+
+# `btfit(btdata, a)`
+
+
+```r
+btfit(btdata, a) 
+```
+
+- If `a = 1`, finds MLE on each fully connected component, using the MM-algorithm
+
+- If `a &gt; 1`, finds the MAP estimate of `\(\pi\)`
+
+- Returns a `btfit` S3 object
+
+
+```r
+btfit(btdata, a, 
+      MAP_by_component = FALSE, 
+      subset = NULL, 
+      maxit = 10000, 
+      epsilon = 0.001) 
+```
+
+---
+
+
+
+```r
+toy_fit_MAP &lt;- btfit(toy_btdata, a = 1.1)
+summary(toy_fit_MAP)  
+## Warning: `data_frame()` was deprecated in tibble 1.1.0.
+## Please use `tibble()` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.
+## $call
+## btfit(btdata = toy_btdata, a = 1.1)
+## 
+## $item_summary
+## # A tibble: 8 × 3
+##   component    item  estimate
+##   &lt;chr&gt;        &lt;chr&gt;    &lt;dbl&gt;
+## 1 full_dataset Eve     1.90  
+## 2 full_dataset Cyd     0.472 
+## 3 full_dataset Han     0.245 
+## 4 full_dataset Amy    -0.0766
+## 5 full_dataset Gal    -0.102 
+## 6 full_dataset Ben    -0.423 
+## 7 full_dataset Dan    -0.536 
+## 8 full_dataset Fin    -1.48  
+## 
+## $component_summary
+## # A tibble: 1 × 4
+##   component    num_items iters converged
+##   &lt;chr&gt;            &lt;int&gt; &lt;int&gt; &lt;lgl&gt;    
+## 1 full_dataset         8   101 TRUE
+```
+
+---
+
+
+
+
+```r
+toy_fit_MLE &lt;- btfit(toy_btdata, a = 1)
+summary(toy_fit_MLE, SE = TRUE) 
+## $call
+## btfit(btdata = toy_btdata, a = 1)
+## 
+## $item_summary
+## # A tibble: 7 × 4
+##   component item  estimate    SE
+##   &lt;chr&gt;     &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt;
+## 1 2         Han     0.696  0.911
+## 2 2         Gal     0.413  0.768
+## 3 2         Fin    -1.11   1.05 
+## 4 3         Cyd     0.592  0.991
+## 5 3         Amy     0.0325 0.699
+## 6 3         Ben    -0.243  0.944
+## 7 3         Dan    -0.382  0.712
+## 
+## $component_summary
+## # A tibble: 2 × 4
+##   component num_items iters converged
+##   &lt;chr&gt;         &lt;int&gt; &lt;int&gt; &lt;lgl&gt;    
+## 1 2                 3     6 TRUE     
+## 2 3                 4    10 TRUE
+```
+
+---
+
+```r
+toy_data %&gt;%
+  codes_to_counts(c("W1", "W2", "D")) %&gt;%
+  btdata() %&gt;%
+  btfit(1) %&gt;%
+  summary(ref = "Amy", subset = function(x) "Amy" %in% names(x)) 
+## $call
+## btfit(btdata = ., a = 1)
+## 
+## $item_summary
+## # A tibble: 4 × 3
+##   component item  estimate
+##   &lt;chr&gt;     &lt;chr&gt;    &lt;dbl&gt;
+## 1 3         Cyd      0.560
+## 2 3         Amy      0    
+## 3 3         Ben     -0.276
+## 4 3         Dan     -0.414
+## 
+## $component_summary
+## # A tibble: 1 × 4
+##   component num_items iters converged
+##   &lt;chr&gt;         &lt;int&gt; &lt;int&gt; &lt;lgl&gt;    
+## 1 3                 4    10 TRUE
+```
+
+---
+# `btprob(object)`
+
+Gives the Bradley-Terry probabilities `\(\frac{\pi_i}{\pi_i + \pi_j}\)`
+
+
+```r
+citations %&gt;%
+  btdata() %&gt;%
+  btfit(1, epsilon = 1e-6) %&gt;%
+  btprob()
+## 4 x 4 sparse Matrix of class "dgCMatrix"
+##               citing
+## cited              JRSS-B Biometrika       JASA Comm Statist
+##   JRSS-B       .          0.56683657 0.67885745    0.9615071
+##   Biometrika   0.43316343 .          0.61764636    0.9502196
+##   JASA         0.32114255 0.38235364 .             0.9219760
+##   Comm Statist 0.03849288 0.04978036 0.07802401    .
+```
+
+---
+
+
+```r
+citations %&gt;%
+  btdata() %&gt;%
+  btfit(1, epsilon = 1e-6) %&gt;%
+  btprob(as_df = TRUE)
+## # A tibble: 6 × 5
+##   component    cited      citing       prob1wins prob2wins
+##   &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;
+## 1 full_dataset JRSS-B     Biometrika       0.567    0.433 
+## 2 full_dataset JRSS-B     JASA             0.679    0.321 
+## 3 full_dataset Biometrika JASA             0.618    0.382 
+## 4 full_dataset JRSS-B     Comm Statist     0.962    0.0385
+## 5 full_dataset Biometrika Comm Statist     0.950    0.0498
+## 6 full_dataset JASA       Comm Statist     0.922    0.0780
+```
+
+
+---
+# A proper example
+
+
+
+```r
+comp_cites 
+## # A tibble: 415,496 × 3
+##    cited_pdpass citing_pdpass count
+##    &lt;chr&gt;        &lt;chr&gt;         &lt;dbl&gt;
+##  1 10032645     10030580          2
+##  2 10083166     10030580          4
+##  3 10170329     10030580          2
+##  4 10191810     10030580          2
+##  5 10223803     10030580          2
+##  6 10254226     10030580          1
+##  7 11490383     10030580          2
+##  8 11720482     10030580          2
+##  9 11811663     10030580          1
+## 10 11862620     10030580          4
+## # … with 415,486 more rows
+```
+
+---
+
+
+```r
+system.time(comp_cites_data &lt;- btdata(comp_cites))
+##    user  system elapsed 
+##   2.085   0.119   2.207
+summary(comp_cites_data)
+## Number of items: 27137 
+## Density of wins matrix: 0.0005642131 
+## Fully-connected: FALSE 
+## Number of fully-connected components: 11297 
+## Summary of fully-connected components: 
+##   Component size  Freq
+## 1              1 11285
+## 2              2    10
+## 3              3     1
+## 4          15829     1
+```
+
+---
+
+
+```r
+comp_cites_data &lt;- btdata(comp_cites)
+system.time(comp_cites_fit &lt;- btfit(comp_cites_data, 1))
+##    user  system elapsed 
+##   6.636   0.938   7.677
+system.time(comp_cites_fit &lt;- btfit(comp_cites_data, 1.1)) 
+##    user  system elapsed 
+##  16.992   2.534  19.930
+```
+
+---
+
+&lt;img src="rse-interview-pres_files/figure-html/unnamed-chunk-19-1.png" width="80%" height="80%" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: center, middle
+
+# Further information
+
+CRAN
+
+[https://CRAN.R-project.org/package=BradleyTerryScalable](https://CRAN.R-project.org/package=BradleyTerryScalable)
+
+GitHub
+
+[https://github.com/EllaKaye/BradleyTerryScalable]([https://github.com/EllaKaye/BradleyTerryScalable])
+
+Documentation (`pkgdown` site)
+
+[https://ellakaye.github.io/BradleyTerryScalable]([https://ellakaye.github.io/BradleyTerryScalable])
+
+---
+
+class: left, end
+
+.right[# Thank you!
+## Any questions?
+### &lt;span style="color:#FDFCFA"&gt;Get in touch!&lt;/span&gt;]
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "solarized-light",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+@import url(https://fonts.googleapis.com/css?family=Montserrat&display=swap);
+@import url(https://fonts.googleapis.com/css?family=Jost&display=swap);
+@import url(https://fonts.googleapis.com/css?family=Fira+Mono&display=swap);
+
+body {
+  font-family: Montserrat;
+  font-weight: normal;
+}
+
+h1, h2, h3 {
+  font-family: Jost;
+  font-weight: 600;
+}
+
+code {
+  font-family: 'Fira Mono';
+}

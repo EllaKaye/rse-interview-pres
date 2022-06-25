@@ -1,0 +1,42 @@
+/*-- scss:defaults --*/
+
+@import url(https://fonts.googleapis.com/css?family=Montserrat&display=swap);
+@import url(https://fonts.googleapis.com/css?family=Jost&display=swap);
+@import url(https://fonts.googleapis.com/css?family=Fira+Mono&display=swap);
+@import url(https://fonts.googleapis.com/css?family=Alata&display=swap);
+
+// fonts
+$font-family-sans-serif: "Jost", Helvetica, sans-serif !default;
+$font-family-monospace: "Fira Mono", monospace;
+
+// colors
+$pink: #D4006A;
+$blue: #006AD4;
+$green: #00D46A;
+$cyan: #00D4D4;
+
+$code-color: $blue;
+$dark-bg-code-color: #fff;
+
+// headings
+$presentation-heading-font: "Alata", Impact, sans-serif;
+$presentation-heading-color: $pink;
+
+.middle {
+  text-align: center;
+}
+
+#title-slide .title {
+  font-size: 70px;
+  text-align: left;
+  margin: auto auto 50px auto;
+}
+
+h2 {
+  padding-bottom: 20px;
+}
+
+.cell {
+  padding-bottom: 20px;
+}
+
