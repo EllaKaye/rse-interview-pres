@@ -387,7 +387,7 @@
 <section id="the-bradley-terry-model" class="slide level2 middle center" data-background-color="#006AD4">
 <h2>The Bradley-Terry model</h2>
 </section>
-<section id="section" class="slide level2" data-background-image="images/football.png" data-background-size="contain">
+<section id="section" class="slide level2" data-background-image="images/football2.webp">
 <h2></h2>
 </section>
 <section id="section-1" class="slide level2" data-background-image="images/journals.png">
@@ -550,21 +550,12 @@ Summary of fully-connected components:
 <li><p>If <code>a &gt; 1</code>, finds the MAP estimate of <span class="math inline">\(\pi\)</span></p></li>
 <li><p>Returns a <code>btfit</code> S3 object</p></li>
 </ul>
-<div class="fragment">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">btfit</span>(btdata, a, </span>
-<span id="cb10-2"><a href="#cb10-2"></a>      <span class="at">MAP_by_component =</span> <span class="cn">FALSE</span>, </span>
-<span id="cb10-3"><a href="#cb10-3"></a>      <span class="at">subset =</span> <span class="cn">NULL</span>, </span>
-<span id="cb10-4"><a href="#cb10-4"></a>      <span class="at">maxit =</span> <span class="dv">10000</span>, </span>
-<span id="cb10-5"><a href="#cb10-5"></a>      <span class="at">epsilon =</span> <span class="fl">0.001</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
 </section>
 <section id="section-4" class="slide level2 smaller75">
 <h2></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>toy_fit_MAP <span class="ot">&lt;-</span> <span class="fu">btfit</span>(toy_btdata, <span class="at">a =</span> <span class="fl">1.1</span>)</span>
-<span id="cb11-2"><a href="#cb11-2"></a><span class="fu">summary</span>(toy_fit_MAP)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>toy_fit_MAP <span class="ot">&lt;-</span> <span class="fu">btfit</span>(toy_btdata, <span class="at">a =</span> <span class="fl">1.1</span>)</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="fu">summary</span>(toy_fit_MAP)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$call
 btfit(btdata = toy_btdata, a = 1.1)
@@ -593,8 +584,8 @@ $component_summary
 <section id="section-5" class="slide level2 smaller75">
 <h2></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>toy_fit_MLE <span class="ot">&lt;-</span> <span class="fu">btfit</span>(toy_btdata, <span class="at">a =</span> <span class="dv">1</span>)</span>
-<span id="cb13-2"><a href="#cb13-2"></a><span class="fu">summary</span>(toy_fit_MLE, <span class="at">SE =</span> <span class="cn">TRUE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>toy_fit_MLE <span class="ot">&lt;-</span> <span class="fu">btfit</span>(toy_btdata, <span class="at">a =</span> <span class="dv">1</span>)</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="fu">summary</span>(toy_fit_MLE, <span class="at">SE =</span> <span class="cn">TRUE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$call
 btfit(btdata = toy_btdata, a = 1)
@@ -623,11 +614,11 @@ $component_summary
 <section id="section-6" class="slide level2 smaller75">
 <h2></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>toy_data <span class="sc">|&gt;</span></span>
-<span id="cb15-2"><a href="#cb15-2"></a>  <span class="fu">codes_to_counts</span>(<span class="fu">c</span>(<span class="st">"W1"</span>, <span class="st">"W2"</span>, <span class="st">"D"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb15-3"><a href="#cb15-3"></a>  <span class="fu">btdata</span>() <span class="sc">|&gt;</span></span>
-<span id="cb15-4"><a href="#cb15-4"></a>  <span class="fu">btfit</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb15-5"><a href="#cb15-5"></a>  <span class="fu">summary</span>(<span class="at">ref =</span> <span class="st">"Amy"</span>, <span class="at">subset =</span> <span class="cf">function</span>(x) <span class="st">"Amy"</span> <span class="sc">%in%</span> <span class="fu">names</span>(x)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14" data-code-line-numbers="4-5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>toy_data <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">codes_to_counts</span>(<span class="fu">c</span>(<span class="st">"W1"</span>, <span class="st">"W2"</span>, <span class="st">"D"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">btdata</span>() <span class="sc">|&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a>  <span class="fu">btfit</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a>  <span class="fu">summary</span>(<span class="at">ref =</span> <span class="st">"Amy"</span>, <span class="at">subset =</span> <span class="cf">function</span>(x) <span class="st">"Amy"</span> <span class="sc">%in%</span> <span class="fu">names</span>(x)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$call
 btfit(btdata = btdata(codes_to_counts(toy_data, c("W1", "W2", 
@@ -654,11 +645,11 @@ $component_summary
 <h2><code>btprob(object)</code></h2>
 <p>Gives the Bradley-Terry probabilities <span class="math inline">\(\frac{\pi_i}{\pi_i + \pi_j}\)</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17" data-code-line-numbers="4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>citations <span class="sc">|&gt;</span></span>
-<span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">btdata</span>() <span class="sc">|&gt;</span></span>
-<span id="cb17-3"><a href="#cb17-3"></a>  <span class="fu">btfit</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb17-4"><a href="#cb17-4"></a>  <span class="fu">btprob</span>() <span class="sc">|&gt;</span></span>
-<span id="cb17-5"><a href="#cb17-5"></a>  <span class="fu">round</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16" data-code-line-numbers="4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>citations <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">btdata</span>() <span class="sc">|&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a>  <span class="fu">btfit</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-4"><a href="#cb16-4"></a>  <span class="fu">btprob</span>() <span class="sc">|&gt;</span></span>
+<span id="cb16-5"><a href="#cb16-5"></a>  <span class="fu">round</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>4 x 4 sparse Matrix of class "dgCMatrix"
               citing
@@ -674,10 +665,10 @@ cited          JRSS-B Biometrika  JASA Comm Statist
 <h2><code>btprob(object)</code></h2>
 <p>Gives the Bradley-Terry probabilities <span class="math inline">\(\frac{\pi_i}{\pi_i + \pi_j}\)</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19" data-code-line-numbers="4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>citations <span class="sc">|&gt;</span></span>
-<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">btdata</span>() <span class="sc">|&gt;</span></span>
-<span id="cb19-3"><a href="#cb19-3"></a>  <span class="fu">btfit</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb19-4"><a href="#cb19-4"></a>  <span class="fu">btprob</span>(<span class="at">as_df =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18" data-code-line-numbers="4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>citations <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">btdata</span>() <span class="sc">|&gt;</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a>  <span class="fu">btfit</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a>  <span class="fu">btprob</span>(<span class="at">as_df =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 5
   component    cited      citing       prob1wins prob2wins
@@ -697,7 +688,7 @@ cited          JRSS-B Biometrika  JASA Comm Statist
 
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>comp_cites</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>comp_cites</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 415,496 × 3
    cited_pdpass citing_pdpass count
@@ -719,12 +710,12 @@ cited          JRSS-B Biometrika  JASA Comm Statist
 <section id="btdata-timing" class="slide level2">
 <h2>btdata: timing</h2>
 <div class="cell" data-hash="rse-pres_cache/revealjs/btdata-timing_7d2061157b172d57e6611845c55bdcea">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">system.time</span>(comp_cites_data <span class="ot">&lt;-</span> <span class="fu">btdata</span>(comp_cites))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">system.time</span>(comp_cites_data <span class="ot">&lt;-</span> <span class="fu">btdata</span>(comp_cites))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user  system elapsed 
   1.577   0.092   1.671 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">summary</span>(comp_cites_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">summary</span>(comp_cites_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Number of items: 27137 
 Density of wins matrix: 0.0005642131 
@@ -742,12 +733,12 @@ Summary of fully-connected components:
 <section id="btfit-timing" class="slide level2">
 <h2>btfit: timing</h2>
 <div class="cell" data-hash="rse-pres_cache/revealjs/btfit-timing_9eb69ff079abf850143a3f4d80f4fb39">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="fu">system.time</span>(comp_cites_fit_mle <span class="ot">&lt;-</span> <span class="fu">btfit</span>(comp_cites_data, <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">system.time</span>(comp_cites_fit_mle <span class="ot">&lt;-</span> <span class="fu">btfit</span>(comp_cites_data, <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user  system elapsed 
   6.073   0.868   7.115 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="fu">system.time</span>(comp_cites_fit_map <span class="ot">&lt;-</span> <span class="fu">btfit</span>(comp_cites_data, <span class="fl">1.1</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">system.time</span>(comp_cites_fit_map <span class="ot">&lt;-</span> <span class="fu">btfit</span>(comp_cites_data, <span class="fl">1.1</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   user  system elapsed 
  15.562   2.234  17.968 </code></pre>

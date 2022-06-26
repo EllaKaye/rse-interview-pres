@@ -7,11 +7,12 @@ format:
     execute:
       echo: true
 editor: visual
+
 ---
 
 ## The Bradley-Terry model {.middle .center background-color="#006AD4"}
 
-##  {background-image="images/football.png" background-size="contain"}
+##  {background-image="images/football2.webp"}
 
 ##  {background-image="images/journals.png"}
 
@@ -139,16 +140,6 @@ btfit(btdata, a)
 
 - Returns a `btfit` S3 object
 
-. . .
-
-```{r btfit-full-noeval}
-#| eval: false
-btfit(btdata, a, 
-      MAP_by_component = FALSE, 
-      subset = NULL, 
-      maxit = 10000, 
-      epsilon = 0.001) 
-```
 ## {.smaller75}
 
 ```{r toy-map}
@@ -166,6 +157,7 @@ summary(toy_fit_MLE, SE = TRUE)
 ## {.smaller75}
 
 ```{r toy-subset}
+#| code-line-numbers: "4-5"
 toy_data |>
   codes_to_counts(c("W1", "W2", "D")) |>
   btdata() |>
@@ -274,4 +266,5 @@ ggplot(btfit_timings_df, aes(K, time, colour = density)) +
 
 ## Thank you! {.right}
 
-### Any questions?
+### Any questions? 
+
