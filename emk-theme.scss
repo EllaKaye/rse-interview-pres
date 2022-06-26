@@ -26,6 +26,10 @@ $presentation-heading-color: $pink;
   text-align: center;
 }
 
+#title-slide {
+  background-image: url("hexagon-outlines-tr.png");  
+}
+
 #title-slide .title {
   font-size: 70px;
   text-align: left;
@@ -40,3 +44,10 @@ h2 {
   padding-bottom: 20px;
 }
 
+.smaller75 {
+  font-size: 75%;
+}
+
+.right {
+  text-align: right;  
+}

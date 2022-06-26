@@ -29,7 +29,7 @@ where $\pi_k$ is a strength parameter for player $k$, $1 \leq k \leq K$ and $\su
 
 . . .
 
-`r htmltools::br()` **The MLE exists and is finite whenever the comparison graph is fully connected.**
+<br/>**The MLE exists and is finite whenever the comparison graph is fully connected.**
 
 ## Fitting the model
 
@@ -102,7 +102,7 @@ $$
 
 ## `btdata(x)`
 
-```{r}
+```{r citations}
 library(BradleyTerryScalable)
 citations
 ```
@@ -111,14 +111,14 @@ citations
 citations_btdata <- btdata(citations)
 summary(citations_btdata) 
 ```
----
+## {.smaller75}
 
-```{r}
+```{r toy-data}
 toy_data
 ```
----
+##
 
-```{r}
+```{r toy-btdata}
 #| warning: false
 toy_btdata <- toy_data |>
   codes_to_counts(c("W1", "W2", "D")) |>
@@ -128,9 +128,8 @@ summary(toy_btdata)
 
 ## `btfit(btdata, a)`
 
-```{r}
+```{r btfit-noeval}
 #| eval: false
-
 btfit(btdata, a) 
 ```
 
@@ -142,25 +141,137 @@ btfit(btdata, a)
 
 . . .
 
-```{r}
+```{r btfit-full-noeval}
 #| eval: false
-
 btfit(btdata, a, 
       MAP_by_component = FALSE, 
       subset = NULL, 
       maxit = 10000, 
       epsilon = 0.001) 
 ```
----
+## {.smaller75}
 
-```{r}
+```{r toy-map}
 toy_fit_MAP <- btfit(toy_btdata, a = 1.1)
 summary(toy_fit_MAP)  
 ```
 
----
+## {.smaller75}
 
-```{r}
+```{r toy-mle}
 toy_fit_MLE <- btfit(toy_btdata, a = 1)
 summary(toy_fit_MLE, SE = TRUE) 
 ```
+
+## {.smaller75}
+
+```{r toy-subset}
+toy_data |>
+  codes_to_counts(c("W1", "W2", "D")) |>
+  btdata() |>
+  btfit(1) |>
+  summary(ref = "Amy", subset = function(x) "Amy" %in% names(x)) 
+```
+## `btprob(object)`
+
+Gives the Bradley-Terry probabilities $\frac{\pi_i}{\pi_i + \pi_j}$
+
+```{r citations-prob}
+#| code-line-numbers: "4"
+
+citations |>
+  btdata() |>
+  btfit(1) |>
+  btprob() |>
+  round(3)
+```
+
+## `btprob(object)`
+
+Gives the Bradley-Terry probabilities $\frac{\pi_i}{\pi_i + \pi_j}$
+
+```{r citations-prob-df}
+#| code-line-numbers: "4"
+
+citations |>
+  btdata() |>
+  btfit(1) |>
+  btprob(as_df = TRUE)
+```
+
+## A real-world example
+
+```{r load_comp_cites}
+#| cache: true
+#| echo: false
+#| message: false
+#| warning: false
+
+library(dplyr)
+
+comp_cites <- readr::read_csv(here::here("comp_cites_3.csv")) %>%
+  mutate(cited_pdpass = as.character(cited_pdpass), citing_pdpass = as.character(citing_pdpass))
+```
+
+```{r}
+comp_cites
+```
+
+## btdata: timing
+
+```{r btdata-timing}
+#| cache: true
+system.time(comp_cites_data <- btdata(comp_cites))
+summary(comp_cites_data)
+```
+## btfit: timing
+```{r btfit-timing}
+#| cache: true
+system.time(comp_cites_fit_mle <- btfit(comp_cites_data, 1))
+system.time(comp_cites_fit_map <- btfit(comp_cites_data, 1.1)) 
+```
+
+## btfit() timing simulations
+
+Time in seconds to run `btfit()` given number of items and win matrix densities <b style="color:#00D4D4;">0.5</b>, <b style="color:#006AD4;">0.1</b>, <b style="color:#00D46A;">0.01</b> and <b style="color:#D4006A;">0.001</b>.
+
+
+
+```{r}
+#| echo: false
+
+load("btfit_timings_df.RData")
+
+library(ggplot2)
+library(ggrepel)
+
+ggplot(btfit_timings_df, aes(K, time, colour = density)) +
+  geom_line(size = 1.5) + 
+  geom_point(size = 3) +
+  xlab(NULL) +
+  ylab(NULL) +
+  scale_colour_manual(values = c("#D4006A", "#00D46A", "#006AD4", "#00D4D4")) +
+  theme_minimal() +
+  theme(legend.position = "none",
+        axis.text = element_text(size = 24))
+```
+
+## To improve
+
+- Allow additional algorithms (would involve rethinking arguments to `btfit`)
+
+- Make function output type-consistent
+
+- Leverage updates in dependent packages
+
+- Additional functions to return summary values
+
+- Write tests
+
+- Fix bugs
+
+- Return to CRAN
+
+## Thank you! {.right}
+
+### Any questions?
