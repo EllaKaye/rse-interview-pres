@@ -94,7 +94,7 @@ where $W_i = \sum_{j=1}^K w_{ij}$ is the number of wins for item $i$ and $n_{ij}
 
 - Easy to use
 
-- Has to be fast *enough* ('Scalable' is in the package name!)
+- Has to be fast *enough* 
 
 - Has to be able to deal with cases when the comparison graph is not fully connected
 
@@ -109,8 +109,6 @@ where $W_i = \sum_{j=1}^K w_{ij}$ is the number of wins for item $i$ and $n_{ij}
   - may need to call `codes_to_counts()` first
 
   - `summary(btdata)`
-  
-  - `select_components(btdata, subset)`
 
 ## Workflow: fit
 
@@ -249,13 +247,12 @@ Time in seconds to run `btfit()` given number of items and win matrix densities 
 
 
 
-```{r}
+```{r timings-plot}
 #| echo: false
 
-load("btfit_timings_df.RData")
+load("btfit_timings_2022_df.RData")
 
 library(ggplot2)
-library(ggrepel)
 
 ggplot(btfit_timings_df, aes(K, time, colour = density)) +
   geom_line(size = 1.5) + 
@@ -268,15 +265,15 @@ ggplot(btfit_timings_df, aes(K, time, colour = density)) +
         axis.text = element_text(size = 24))
 ```
 
+
+
 ## To improve
 
 - Allow additional algorithms (would involve rethinking arguments to `btfit`)
 
-- Make function output type-consistent
-
 - Leverage updates in dependent packages
 
-- Additional functions to return summary values
+- Additional usability improvements
 
 - Write tests
 

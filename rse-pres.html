@@ -451,7 +451,7 @@
 <ul>
 <li><p>Fit the Bradley-Terry model to large and sparse data sets</p></li>
 <li><p>Easy to use</p></li>
-<li><p>Has to be fast <em>enough</em> (‘Scalable’ is in the package name!)</p></li>
+<li><p>Has to be fast <em>enough</em></p></li>
 <li><p>Has to be able to deal with cases when the comparison graph is not fully connected</p></li>
 <li><p>Complement to (NOT a replacement for) <code>BradleyTerry2</code> package</p></li>
 </ul>
@@ -464,7 +464,6 @@
 <li><p><code>x</code> can be a data frame, graph, matrix or contigency table</p></li>
 <li><p>may need to call <code>codes_to_counts()</code> first</p></li>
 <li><p><code>summary(btdata)</code></p></li>
-<li><p><code>select_components(btdata, subset)</code></p></li>
 </ul></li>
 </ul>
 </section>
@@ -760,14 +759,13 @@ Summary of fully-connected components:
 <h2>btfit() timing simulations</h2>
 <p>Time in seconds to run <code>btfit()</code> given number of items and win matrix densities <b style="color:#00D4D4;">0.5</b>, <b style="color:#006AD4;">0.1</b>, <b style="color:#00D46A;">0.01</b> and <b style="color:#D4006A;">0.001</b>.</p>
 
-<img data-src="rse-pres_files/figure-revealjs/unnamed-chunk-3-1.png" width="960" class="r-stretch"></section>
+<img data-src="rse-pres_files/figure-revealjs/timings-plot-1.png" width="960" class="r-stretch"></section>
 <section id="to-improve" class="slide level2">
 <h2>To improve</h2>
 <ul>
 <li><p>Allow additional algorithms (would involve rethinking arguments to <code>btfit</code>)</p></li>
-<li><p>Make function output type-consistent</p></li>
 <li><p>Leverage updates in dependent packages</p></li>
-<li><p>Additional functions to return summary values</p></li>
+<li><p>Additional usability improvements</p></li>
 <li><p>Write tests</p></li>
 <li><p>Fix bugs</p></li>
 <li><p>Return to CRAN</p></li>
