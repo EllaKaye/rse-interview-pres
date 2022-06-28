@@ -380,7 +380,7 @@
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" class="center">
+<section id="title-slide" data-background-image="hexagon-outlines-tr.svg" data-background-position="top right" data-background-size="50%" class="center">
   <h1 class="title">An overview of <code>BradleyTerryScalable</code></h1>
 </section>
 
@@ -397,7 +397,10 @@
 <h2>The model</h2>
 <p>The Bradley-Terry probability that item <span class="math inline">\(i\)</span> beats item <span class="math inline">\(j\)</span> is</p>
 <p><span class="math display">\[p_{ij} = \frac{\pi_i}{\pi_i + \pi_j},\]</span></p>
+<p><br></p>
+<div class="smaller70">
 <p>where <span class="math inline">\(\pi_k\)</span> is a strength parameter for player <span class="math inline">\(k\)</span>, <span class="math inline">\(1 \leq k \leq K\)</span> and <span class="math inline">\(\sum_{i=1}^K{\pi_i} = K\)</span>.</p>
+</div>
 </section>
 <section id="the-comparison-graph" class="slide level2">
 <h2>The comparison graph</h2>
@@ -418,6 +421,10 @@
 \]</span></p>
 </div>
 </div>
+<p><br></p>
+<div class="smaller70">
+<p>where <span class="math inline">\(W_i = \sum_{j=1}^K w_{ij}\)</span> is the number of wins for item <span class="math inline">\(i\)</span> and <span class="math inline">\(n_{ij} = w_{ij} + w_{ji}\)</span> is the number of comparisons between item <span class="math inline">\(i\)</span> and item <span class="math inline">\(j\)</span> and where <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are the shape and rate parameters of a gamma-distributed prior on <span class="math inline">\(\pi\)</span>: <span class="math inline">\(p(\pi) = \prod_{i=1}^K \mathcal{G}(\pi_i; a, b)\)</span>.</p>
+</div>
 </section>
 <section id="fitting-the-model-1" class="slide level2">
 <h2>Fitting the model</h2>
@@ -431,6 +438,10 @@
 \]</span></p>
 </div>
 </div>
+<p><br></p>
+<div class="smaller70">
+<p>where <span class="math inline">\(W_i = \sum_{j=1}^K w_{ij}\)</span> is the number of wins for item <span class="math inline">\(i\)</span> and <span class="math inline">\(n_{ij} = w_{ij} + w_{ji}\)</span> is the number of comparisons between item <span class="math inline">\(i\)</span> and item <span class="math inline">\(j\)</span> and where <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are the shape and rate parameters of a gamma-distributed prior on <span class="math inline">\(\pi\)</span>: <span class="math inline">\(p(\pi) = \prod_{i=1}^K \mathcal{G}(\pi_i; a, b)\)</span>.</p>
+</div>
 </section>
 <section id="bradleyterryscalable" class="slide level2 middle center" data-background-color="#006AD4">
 <h2><code>BradleyTerryScalable</code></h2>
@@ -438,10 +449,10 @@
 <section id="aims" class="slide level2">
 <h2>Aims</h2>
 <ul>
-<li><p>Fit the Bradley-Terry model to large and (potentially) sparse data sets</p></li>
+<li><p>Fit the Bradley-Terry model to large and sparse data sets</p></li>
+<li><p>Easy to use</p></li>
 <li><p>Has to be fast <em>enough</em> (‘Scalable’ is in the package name!)</p></li>
 <li><p>Has to be able to deal with cases when the comparison graph is not fully connected</p></li>
-<li><p>Well thought out user interface</p></li>
 <li><p>Complement to (NOT a replacement for) <code>BradleyTerry2</code> package</p></li>
 </ul>
 </section>
@@ -762,9 +773,9 @@ Summary of fully-connected components:
 <li><p>Return to CRAN</p></li>
 </ul>
 </section>
-<section id="thank-you" class="slide level2 right">
+<section id="thank-you" class="slide level2 right" data-background-image="hexagon-outlines-bl.svg" data-background-position="bottom left" data-background-size="50%">
 <h2>Thank you!</h2>
-<h3 id="any-questions">Any questions?</h3>
+<h3 id="i-look-forward-to-your-questions">I look forward to your questions</h3>
 <div class="footer footer-default">
 
 </div>
