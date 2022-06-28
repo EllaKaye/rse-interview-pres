@@ -156,8 +156,6 @@ btfit(btdata, a)
 
 - If `a > 1`, finds the MAP estimate of $\pi$
 
-- Returns a `btfit` S3 object
-
 ## {.smaller75}
 
 ```{r toy-map}

@@ -179,3 +179,19 @@ map(small_binomials, ~BTm(cbind(win1, win2), player1, player2, data = .x))
 load("btfit_timings_df.RData")
 
 btfit_timings_df |> View()
+
+toy_data_mle <- toy_data |>
+  codes_to_counts(c("W1", "W2", "D")) |>
+  btdata() |>
+  btfit(1) 
+
+toy_data_mle_summary <- toy_data_mle |>
+  summary(ref = "Amy", subset = function(x) "Amy" %in% names(x)) 
+
+citations_fit_summary <- citations %>%
+  btdata() %>%
+  btfit(1) %>%
+  summary()
+  
+citations_fit_summary$item_summary %>%
+  summarise(mean(estimate))
