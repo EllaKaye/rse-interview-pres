@@ -115,6 +115,8 @@ where $W_i = \sum_{j=1}^K w_{ij}$ is the number of wins for item $i$ and $n_{ij}
   - may need to call `codes_to_counts()` first
 
   - `summary(btdata)`
+  
+  - `select_components(btdata, subset)`
 
 ## Workflow: fit
 
