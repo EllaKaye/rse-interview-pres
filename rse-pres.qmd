@@ -25,7 +25,7 @@ editor: visual
 
 - where each comparison results in a win/loss or a draw
 
-##  {background-image="images/football2.webp"}
+##  {background-image="images/football2.jpg"}
 
 ##  {background-image="images/journals.png"}
 
